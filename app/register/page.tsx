@@ -49,7 +49,7 @@ const RegisterPage = () => {
 
     try {
       // sending API request for registering user
-      const res = await fetch("/api/register", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
