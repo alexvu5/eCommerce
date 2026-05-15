@@ -61,32 +61,33 @@ app.use(requestLogger);
 // Error logging (only logs 4xx and 5xx responses)
 app.use(errorLogger);
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  process.env.NEXTAUTH_URL,
-  process.env.FRONTEND_URL,
-].filter(Boolean); // Remove undefined values
+// const allowedOrigins = [
+//   'http://localhost:3000',
+//   'http://localhost:3001',
+//   process.env.NEXTAUTH_URL,
+//   process.env.FRONTEND_URL,
+// ].filter(Boolean); // Remove undefined values
 
 // CORS configuration with origin validation
 const corsOptions = {
   origin: function (origin, callback) {
 
-    if (!origin) return callback(null, true);
+    // if (!origin) return callback(null, true);
     
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
+    // if (allowedOrigins.includes(origin)) {
+    //   return callback(null, true);
+    // }
     
 
-    if (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost:')) {
-      return callback(null, true);
-    }
+    // if (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost:')) {
+    //   return callback(null, true);
+    // }
     
-    // Reject other origins
-    const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-    return callback(new Error(msg), false);
+    // // Reject other origins
+    // const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+    // return callback(new Error(msg), false);
+    callback(null, true);
   },
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
