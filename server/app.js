@@ -123,6 +123,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/images", productImagesRouter);
 app.use("/api/main-image", mainImageRouter);
+app.use("/api/register", userRouter);
 app.use("/api/users", userRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/orders", orderRouter);
