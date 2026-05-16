@@ -18,27 +18,39 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any) {
-        try {
-          const user = await prisma.user.findFirst({
-            where: {
-              email: credentials.email,
-            },
-          });
-          if (user) {
-            const isPasswordCorrect = await bcrypt.compare(
-              credentials.password,
-              user.password!
-            );
-            if (isPasswordCorrect) {
-              return {
-                id: user.id,
-                email: user.email,
-                role: user.role,
-              };
-            }
-          }
-        } catch (err: any) {
-          throw new Error(err);
+        // try {
+        //   const user = await prisma.user.findFirst({
+        //     where: {
+        //       email: credentials.email,
+        //     },
+        //   });
+        //   if (user) {
+        //     const isPasswordCorrect = await bcrypt.compare(
+        //       credentials.password,
+        //       user.password!
+        //     );
+        //     if (isPasswordCorrect) {
+        //       return {
+        //         id: user.id,
+        //         email: user.email,
+        //         role: user.role,
+        //       };
+        //     }
+        //   }
+        // } catch (err: any) {
+        //   throw new Error(err);
+        // }
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/login`, { 
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: credentials?.email,
+            password: credentials?.password,
+          }),
+        });
+        const user = await res.json();
+        if (res.ok && user) {
+          return user; 
         }
         return null;
       },

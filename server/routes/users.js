@@ -8,8 +8,11 @@ const {
     updateUser,
     deleteUser,
     getAllUsers, 
-    getUserByEmail
+    getUserByEmail,
+    loginUser
   } = require('../controllers/users');
+
+  router.route('/login').post(loginUser);
 
   router.route('/')
   .get(getAllUsers)

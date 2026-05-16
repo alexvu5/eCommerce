@@ -163,6 +163,44 @@ const getUserByEmail = asyncHandler(async (request, response) => {
   return response.status(200).json(excludePassword(user));
 });
 
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Vui lòng điền đầy đủ email và password" });
+    }
+
+    // 1. Tìm user trong DB bằng Prisma
+    const user = await prisma.user.findFirst({
+      where: { email: email }
+    });
+
+    if (!user) {
+      return res.status(401).json({ error: "Email hoặc mật khẩu không chính xác" });
+    }
+
+    // 2. So sánh mật khẩu người dùng nhập với mật khẩu đã hash trong DB
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ error: "Email hoặc mật khẩu không chính xác" });
+    }
+
+    // 3. Nếu đúng, trả về thông tin cơ bản của User (Không trả về password)
+    return res.status(200).json({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      name: user.name
+    });
+
+  } catch (error) {
+    // Đẩy sang global error handler của bạn
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createUser,
   updateUser,
@@ -170,4 +208,5 @@ module.exports = {
   getUser,
   getAllUsers,
   getUserByEmail,
+  loginUser
 };
